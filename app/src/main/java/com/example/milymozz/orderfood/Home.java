@@ -22,8 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -117,19 +115,19 @@ public class Home extends AppCompatActivity
                 if (Common.isConnectedToInternet(getBaseContext()))
                     loadMenu();
                 else {
-                    Toast.makeText(getBaseContext(), "Please check your connection !!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "인터넷 연결을 확인하세요 !", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        //Default, load for first time
+        //Default, 처음에 로드를 한다
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 if (Common.isConnectedToInternet(getBaseContext()))
                     loadMenu();
                 else {
-                    Toast.makeText(getBaseContext(), "Please check your connection !!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "인터넷 연결을 확인하세요 !", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -139,7 +137,7 @@ public class Home extends AppCompatActivity
         database = FirebaseDatabase.getInstance();
         category = database.getReference("Category");
 
-        //Make sure you move this function after database is getInstance
+
         FirebaseRecyclerOptions<Category> options = new FirebaseRecyclerOptions.Builder<Category>()
                 .setQuery(category, Category.class)
                 .build();
@@ -159,14 +157,14 @@ public class Home extends AppCompatActivity
                 Picasso.with(getBaseContext())
                         .load(category.getImage())
                         .into(viewHolder.imageView);
+
                 final Category clickItem = category;
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
                         Toast.makeText(Home.this, "" + clickItem.getName(), Toast.LENGTH_SHORT).show();
-                        //Get CategoryId and send to new Activity
+                        //CategoryId를 다른 액티비티로 보낸다
                         Intent foodListIntent = new Intent(Home.this, FoodList.class);
-                        //Category is key, so we just gt key of this item
                         foodListIntent.putExtra("CategoryId", adapter.getRef(position).getKey());
                         Log.d("CategoryId", adapter.getRef(position).getKey());
                         startActivity(foodListIntent);
@@ -199,7 +197,7 @@ public class Home extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Set Name for user
+        //유저 이름 셋팅
         View headerView = navigationView.getHeaderView(0);
         txtFullName = (TextView) headerView.findViewById(R.id.txtFullName);
         txtFullName.setText(Common.currentUser.getName());
@@ -213,14 +211,14 @@ public class Home extends AppCompatActivity
 //        recycler_menu.setLayoutManager(layoutManager);
 
         recycler_menu.setLayoutManager(new GridLayoutManager(this, 2));
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(recycler_menu.getContext(),
-                R.anim.layout_fall_down);
-        recycler_menu.setLayoutAnimation(controller);
+//        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(recycler_menu.getContext(),
+//                R.anim.layout_fall_down);
+//        recycler_menu.setLayoutAnimation(controller);
 
         updateToken(FirebaseInstanceId.getInstance().getToken());
 
 
-        //Setup Slider
+        //셋팅 슬라이더
         setUpSlider();
 
         //Register Service
@@ -240,19 +238,17 @@ public class Home extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Banner banner = postSnapshot.getValue(Banner.class);
-                    //We will concat string name and id like
-                    //PIZZA 01 -> And we will use PIZZA for show description, 01 for foodId to click
 
                     assert banner != null;
                     image_list.put(banner.getName() + "@@@" + banner.getId(), banner.getImage());
-
                 }
+
                 for (String key : image_list.keySet()) {
                     String[] keySplit = key.split("@@@");
                     String nameOfFood = keySplit[0];
                     String idOfFood = keySplit[1];
 
-                    //Create Slider
+                    //Create 슬라이더
                     final TextSliderView textSliderView = new TextSliderView(getBaseContext());
                     textSliderView
                             .description(nameOfFood)
@@ -295,7 +291,7 @@ public class Home extends AppCompatActivity
     private void updateToken(String token) {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference tokens = db.getReference("Tokens");
-        Token data = new Token(token, false); // false because this token send from Client app
+        Token data = new Token(token, false); // false 이 토큰은 클라이언트 앱에서 전송된다
         tokens.child(Common.currentUser.getPhone()).setValue(data);
 
     }
@@ -306,8 +302,8 @@ public class Home extends AppCompatActivity
         swipeRefreshLayout.setRefreshing(false);
 
         //Animation
-        recycler_menu.getAdapter().notifyDataSetChanged();
-        recycler_menu.scheduleLayoutAnimation();
+//        recycler_menu.getAdapter().notifyDataSetChanged();
+//        recycler_menu.scheduleLayoutAnimation();
 
     }
 
@@ -476,7 +472,7 @@ public class Home extends AppCompatActivity
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(Home.this, "Update Your Home Address", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Home.this, "집 주소를 설정하세요 !", Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -567,8 +563,8 @@ public class Home extends AppCompatActivity
 
     private void showUpdateNameDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
-        alertDialog.setTitle("Update Name");
-        alertDialog.setMessage("Please fill all information");
+        alertDialog.setTitle("이름 재설정");
+        alertDialog.setMessage("이름을 다시 설정하세요 !");
 
         LayoutInflater inflater = this.getLayoutInflater();
         View layout_name = inflater.inflate(R.layout.update_name_layout, null);
@@ -600,7 +596,7 @@ public class Home extends AppCompatActivity
                                 //Dismiss Dialog
                                 waitingDialog.dismiss();
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(Home.this, "Name was updated!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Home.this, "이름 재설정 완료 !", Toast.LENGTH_SHORT).show();
                                 }
 
                             }

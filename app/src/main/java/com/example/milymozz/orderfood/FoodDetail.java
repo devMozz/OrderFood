@@ -209,7 +209,7 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
                         .load(currentFood.getImage())
                         .into(food_image);
 
-                collapsingToolbarLayout.setTitle(currentFood.getName());
+//                collapsingToolbarLayout.setTitle(currentFood.getName());
 
                 food_price.setText(currentFood.getPrice());
                 food_name.setText(currentFood.getName());

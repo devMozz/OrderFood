@@ -52,6 +52,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="9"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
@@ -80,7 +81,7 @@
             android:id="@+id/btn_quantity"
             android:layout_width="60dp"
             android:layout_height="30dp"
-            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
             app:backGroundColor="@color/colorAccent"
             app:finalNumber="20"
             app:initialNumber="1"

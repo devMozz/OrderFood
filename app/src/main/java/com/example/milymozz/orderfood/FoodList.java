@@ -84,6 +84,7 @@ public class FoodList extends AppCompatActivity {
             SharePhoto photo = new SharePhoto.Builder()
                     .setBitmap(bitmap)
                     .build();
+
             if (ShareDialog.canShow(SharePhotoContent.class)) {
                 SharePhotoContent content = new SharePhotoContent.Builder()
                         .addPhoto(photo)
@@ -148,7 +149,7 @@ public class FoodList extends AppCompatActivity {
                     if (Common.isConnectedToInternet(getBaseContext()))
                         loadListFood(categoryId);
                     else {
-                        Toast.makeText(FoodList.this, "Please check your connection !!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FoodList.this, "인터넷 연결을 확인하세요 !", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
