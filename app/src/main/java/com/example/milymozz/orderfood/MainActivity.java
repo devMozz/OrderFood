@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         AccountKit.initialize(this);
         setContentView(R.layout.activity_main);
 
-//        printKeyHash();
+        printKeyHash();
 
         database = FirebaseDatabase.getInstance();
         users = database.getReference("User");

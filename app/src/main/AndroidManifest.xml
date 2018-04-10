@@ -32,6 +32,7 @@
             android:value="@string/account_kit_client_token"/>
 
         <activity android:name="com.facebook.accountkit.ui.AccountKitActivity"/>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -70,7 +71,7 @@
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider413673625757274"
+            android:authorities="com.facebook.app.FacebookContentProvider153245932008718"
             android:exported="true"/>
 
         <activity android:name=".SearchActivity">
