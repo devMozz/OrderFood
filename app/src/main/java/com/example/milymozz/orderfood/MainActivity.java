@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             //Show Dialog
             final AlertDialog waitingDialog = new SpotsDialog(this);
             waitingDialog.show();
-            waitingDialog.setMessage("Please wait");
+            waitingDialog.setMessage("잠시만 기다려 주세요");
             waitingDialog.setCancelable(false);
 
             AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 //Show Dialog
                 final AlertDialog waitingDialog = new SpotsDialog(this);
                 waitingDialog.show();
-                waitingDialog.setMessage("Please wait");
+                waitingDialog.setMessage("잠시만 기다려 주세요");
                 waitingDialog.setCancelable(false);
 
                 //Get current Phone
@@ -183,26 +183,23 @@ public class MainActivity extends AppCompatActivity {
                     public void onSuccess(Account account) {
                         final String userPhone = String.valueOf(account.getPhoneNumber());
 
-                        //Check if exists on Firebase Users
                         users.orderByKey().equalTo(userPhone)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         if (!dataSnapshot.child(userPhone).exists()) { // If not exists
-                                            // Create new User and Login
                                             User newUser = new User();
                                             newUser.setPhone(userPhone);
                                             newUser.setName("");
                                             newUser.setBalance(String.valueOf(0.0));
 
-                                            // Add to Firebase
                                             users.child(userPhone)
                                                     .setValue(newUser)
                                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if (task.isSuccessful()) {
-                                                                Toast.makeText(MainActivity.this, "Register Successful!", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(MainActivity.this, "가입 성공 !", Toast.LENGTH_SHORT).show();
 
                                                                 // Login
                                                                 users.child(userPhone)

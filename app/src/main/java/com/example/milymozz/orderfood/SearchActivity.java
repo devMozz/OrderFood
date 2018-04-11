@@ -115,7 +115,7 @@ public class SearchActivity extends AppCompatActivity {
 
         //Search
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
-        materialSearchBar.setHint("Enter your food");
+        materialSearchBar.setHint("음식을 입력하세요");
 
         loadSuggest(); // Write function to load Suggest from firebase
 
@@ -129,7 +129,6 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // When user type their text, we will change suggest list
                 List<String> suggest = new ArrayList<>();
                 for (String search : suggestList) {
                     if (search.toLowerCase().contains(materialSearchBar.getText().toLowerCase()))
@@ -167,16 +166,14 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        //load all food
+        //로드 all food
         loadAllFoods();
 
     }
 
     private void loadAllFoods() {
-        //Create query by category Id
         Query searchByName = foodList;
 
-        //Create Options with query
         FirebaseRecyclerOptions<Food> foodOptions = new FirebaseRecyclerOptions.Builder<Food>()
                 .setQuery(searchByName, Food.class)
                 .build();
@@ -213,7 +210,7 @@ public class SearchActivity extends AppCompatActivity {
 
                         ));
 
-                        Toast.makeText(SearchActivity.this, "Added to Cart", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchActivity.this, "카트에 추가", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -221,7 +218,7 @@ public class SearchActivity extends AppCompatActivity {
                 if (localDB.isFavorites(adapter.getRef(position).getKey(), Common.currentUser.getPhone()))
                     viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_black_24dp);
 
-                //Click to Share
+                //Share
                 viewHolder.share_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -231,7 +228,6 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
 
-                //Click to change state of Favorites
                 viewHolder.fav_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -249,11 +245,11 @@ public class SearchActivity extends AppCompatActivity {
                         if (!localDB.isFavorites(adapter.getRef(position).getKey(), Common.currentUser.getPhone())) {
                             localDB.addToFavorites(favorites);
                             viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_black_24dp);
-                            Toast.makeText(SearchActivity.this, "" + model.getName() + " was added to Favorites", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SearchActivity.this, "" + model.getName() + "를 Favorites에 추가", Toast.LENGTH_SHORT).show();
                         } else {
                             localDB.removeFromFavorites(adapter.getRef(position).getKey(), Common.currentUser.getPhone());
                             viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                            Toast.makeText(SearchActivity.this, "" + model.getName() + " was remove from Favorites", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SearchActivity.this, "" + model.getName() + "를 Favorites에서 삭제", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -297,10 +293,8 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void startSearch(CharSequence text) {
-        //Create query by name
         Query searchByName = foodList.orderByChild("name").equalTo(text.toString()); //Compare Name
 
-        //Create Options with query
         FirebaseRecyclerOptions<Food> foodOptions = new FirebaseRecyclerOptions.Builder<Food>()
                 .setQuery(searchByName, Food.class)
                 .build();
@@ -325,8 +319,6 @@ public class SearchActivity extends AppCompatActivity {
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        //Start new Activity
-                        //Get CategoryId and send to new Activity
                         Intent foodDetailIntent = new Intent(SearchActivity.this, FoodDetail.class);
                         foodDetailIntent.putExtra("FoodId", searchAdapter.getRef(position).getKey()); // Send Food Id to new Activity
                         startActivity(foodDetailIntent);
@@ -336,7 +328,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         };
         searchAdapter.startListening();
-        recyclerView.setAdapter(searchAdapter); // Set adapter for recycler view is search result
+        recyclerView.setAdapter(searchAdapter);
     }
 
     @Override
@@ -353,7 +345,6 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //Fix click back on FoodDetail and get no item in FoodList
         if (adapter != null)
             adapter.startListening();
         if (searchAdapter != null)

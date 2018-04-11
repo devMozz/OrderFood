@@ -43,7 +43,7 @@ public class SignUp extends AppCompatActivity {
                 if (Common.isConnectedToInternet(getBaseContext())) {
 
                     final ProgressDialog mDialog = new ProgressDialog(SignUp.this);
-                    mDialog.setMessage("Please waiting...");
+                    mDialog.setMessage("잠시만 기다려 주세요...");
                     mDialog.show();
 
                     table_user.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -51,7 +51,7 @@ public class SignUp extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.child(edtPhone.getText().toString()).exists()) {
                                 mDialog.dismiss();
-                                Toast.makeText(SignUp.this, "Phone Number already register!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUp.this, "번호가 이미 등록되어 있어요!", Toast.LENGTH_SHORT).show();
 
                             } else {
                                 mDialog.dismiss();
@@ -60,7 +60,7 @@ public class SignUp extends AppCompatActivity {
                                         edtSecureCode.getText().toString());
 
                                 table_user.child(edtPhone.getText().toString()).setValue(user);
-                                Toast.makeText(SignUp.this, "Sign Up successfully!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUp.this, "가입 성공!", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         }
@@ -72,7 +72,7 @@ public class SignUp extends AppCompatActivity {
                     });
 
                 } else {
-                    Toast.makeText(SignUp.this, "Please check your connection !!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUp.this, "인터넷 연결을 확인하세요 !", Toast.LENGTH_SHORT).show();
 
                 }
             }

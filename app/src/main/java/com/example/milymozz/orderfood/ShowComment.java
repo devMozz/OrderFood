@@ -113,7 +113,7 @@ public class ShowComment extends AppCompatActivity {
                 if (getIntent() != null)
                     foodId = getIntent().getStringExtra(Common.INTENT_FOOD_ID);
                 if (!foodId.isEmpty() && foodId != null) {
-                    // Create request query
+
                     Query query = ratingTbl.orderByChild("foodId").equalTo(foodId);
 
                     FirebaseRecyclerOptions<Rating> options = new FirebaseRecyclerOptions.Builder<Rating>()

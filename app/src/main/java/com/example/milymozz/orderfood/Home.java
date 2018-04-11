@@ -442,8 +442,8 @@ public class Home extends AppCompatActivity
 
     private void showHomeAddressDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
-        alertDialog.setTitle("Home Address");
-        alertDialog.setMessage("Please fill all information");
+        alertDialog.setTitle("집 주소");
+        alertDialog.setMessage("집 주소를 입력하세요");
 
         LayoutInflater inflater = this.getLayoutInflater();
         View layout_home = inflater.inflate(R.layout.home_address_layout, null);
@@ -491,8 +491,8 @@ public class Home extends AppCompatActivity
 
     private void showChangePasswordDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
-        alertDialog.setTitle("Change Password");
-        alertDialog.setMessage("Please fill all information");
+        alertDialog.setTitle("비밀번호 변경");
+        alertDialog.setMessage("바꾸실 비밀번호를 입력하세요");
 
         LayoutInflater inflater = this.getLayoutInflater();
         View layout_pwd = inflater.inflate(R.layout.change_password_layout, null);
@@ -527,7 +527,7 @@ public class Home extends AppCompatActivity
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         waitingDialog.dismiss();
-                                        Toast.makeText(Home.this, "Password was Updated!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Home.this, "패스워드가 변경됐어요 !", Toast.LENGTH_SHORT).show();
 
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -539,7 +539,7 @@ public class Home extends AppCompatActivity
 
                     } else {
                         waitingDialog.dismiss();
-                        Toast.makeText(Home.this, "New Password doesn't match", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Home.this, "새 비밀번호가 일치하지 않아요", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
