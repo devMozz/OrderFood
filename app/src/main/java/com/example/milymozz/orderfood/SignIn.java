@@ -75,7 +75,7 @@ public class SignIn extends AppCompatActivity {
                     }
 
                     final ProgressDialog mDialog = new ProgressDialog(SignIn.this);
-                    mDialog.setMessage("Please waiting...");
+                    mDialog.setMessage("잠시만 기다려 주세요...");
                     mDialog.show();
 
                     table_user.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -99,13 +99,13 @@ public class SignIn extends AppCompatActivity {
                                         table_user.removeEventListener(this);
 
                                     } else {
-                                        Toast.makeText(SignIn.this, "Wrong Password!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignIn.this, "다른 비밀번호!", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
                             } else {
                                 mDialog.dismiss();
-                                Toast.makeText(SignIn.this, "User not exist in Database", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignIn.this, "유저가 존재하지 않아요", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -115,7 +115,7 @@ public class SignIn extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Toast.makeText(SignIn.this, "Please check your connection !!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignIn.this, "인터넷 연결을 확인하세요 !", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -125,8 +125,8 @@ public class SignIn extends AppCompatActivity {
 
     private void showForgotPwdDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(SignIn.this);
-        alertDialog.setTitle("Forgot Password");
-        alertDialog.setMessage("Enter your secure code");
+        alertDialog.setTitle("비밀번호를 모르시나요?");
+        alertDialog.setMessage("Secure Code를 입력하세요");
 
         LayoutInflater inflater = this.getLayoutInflater();
         View forgot_view = inflater.inflate(R.layout.forgot_password_layout, null);
@@ -140,7 +140,7 @@ public class SignIn extends AppCompatActivity {
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //Check if user available
+                //Check 만약 유저가 있을 시
                 table_user.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -148,9 +148,9 @@ public class SignIn extends AppCompatActivity {
 
                         if (user != null) {
                             if (user.getSecureCode().equals(edtSecureCode.getText().toString()))
-                                Toast.makeText(SignIn.this, "Your password " + user.getPassword(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignIn.this, "비밀번호는 " + user.getPassword(), Toast.LENGTH_SHORT).show();
                             else
-                                Toast.makeText(SignIn.this, "Wrong secure code !", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignIn.this, "Secure code가 달라요 !", Toast.LENGTH_SHORT).show();
                         }
 
                     }

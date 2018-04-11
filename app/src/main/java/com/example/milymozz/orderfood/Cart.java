@@ -184,7 +184,7 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
                 if (cart.size() > 0)
                     showAlertDialog();
                 else
-                    Toast.makeText(Cart.this, "Your cart is empty !!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Cart.this, "카트가 비었어요 !", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -248,7 +248,7 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
     private void showAlertDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Cart.this);
         alertDialog.setTitle("One more step!");
-        alertDialog.setMessage("Enter your address: ");
+        alertDialog.setMessage("주소를 입력하세요 : ");
 
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -261,7 +261,7 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
         edtAddress.getView().findViewById(R.id.place_autocomplete_search_button).setVisibility(View.GONE);
         //Set hide for Autocomplete edit text
         ((EditText) edtAddress.getView().findViewById(R.id.place_autocomplete_search_input))
-                .setHint("Enter your address");
+                .setHint("주소를 입력하세요");
         //Set Text Size
         ((EditText) edtAddress.getView().findViewById(R.id.place_autocomplete_search_input))
                 .setTextSize(14);
@@ -299,7 +299,7 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
                         ((EditText) edtAddress.getView().findViewById(R.id.place_autocomplete_search_input))
                                 .setText(address);
                     } else {
-                        Toast.makeText(Cart.this, "Please Update Your Home Address", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Cart.this, "집 주소를 업로드 해주세요", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -312,7 +312,6 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //Ship to this address feature
                 if (isChecked) {
                     mGoogleService.getAddressName(String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&sensor=false",
                             mLastLocation.getLatitude(),
@@ -366,7 +365,7 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
                     if (shippingAddress != null) {
                         address = shippingAddress.getAddress().toString();
                     } else {
-                        Toast.makeText(Cart.this, "Please enter address or select option address", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Cart.this, "주소를 입력하거나 혹은 선택해 주세요", Toast.LENGTH_SHORT).show();
 
                         //Fix crash fragment
                         getFragmentManager().beginTransaction()
@@ -378,9 +377,8 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
                 }
 
                 if (TextUtils.isEmpty(address)) {
-                    Toast.makeText(Cart.this, "Please enter address", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Cart.this, "주소를 입력하세요", Toast.LENGTH_SHORT).show();
 
-                    //Fix crash fragment
                     getFragmentManager().beginTransaction()
                             .remove(getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment))
                             .commit();
@@ -389,9 +387,8 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
                 }
 
                 if (!rdiCod.isChecked() && !rdiPaypal.isChecked() && !rdiOrderBalance.isChecked()) {
-                    Toast.makeText(Cart.this, "Please select Paypal option", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Cart.this, "Paypal Option", Toast.LENGTH_SHORT).show();
 
-                    //Fix crash fragment
                     getFragmentManager().beginTransaction()
                             .remove(getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment))
                             .commit();
@@ -410,15 +407,15 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
                             "0",
                             edtComment.getText().toString(),
                             "COD",
-                            String.format("%s, %s", mLastLocation.getLatitude(), mLastLocation.getLongitude()), // Coordinates when user order
+                            String.format("%s, %s", mLastLocation.getLatitude(), mLastLocation.getLongitude()), // Coordinates 유저가 주문을 할 때
                             cart);
 
-                    //Submit to Firebase
-                    //We will using System.CurrentMilli to key
+                    // System.CurrentMilli 를 키로 사용
                     String order_number = String.valueOf(System.currentTimeMillis());
                     requests.child(order_number)
                             .setValue(request);
-                    //Delete cart
+
+                    //Delete 카트
                     new Database(getBaseContext()).cleanCart(Common.currentUser.getPhone());
 
                     sendNotification(order_number);
@@ -428,13 +425,14 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
 
                 } else if (rdiOrderBalance.isChecked()) {
                     double amount = 0;
-                    // First, get total price from textTotalPrice
+                    // First, 전체 가격을 받아온다
                     try {
                         amount = Common.formatCurrency(txtTotalPlace.getText().toString(), Locale.US).doubleValue();
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    // After receive total price of this order, just complete with user balance
+
+                    // 이 주문의 총 가격을 받은 후 사용자 Balance 완료
                     if (Double.parseDouble(Common.currentUser.getBalance().toString()) >= amount) {
                         Request request = new Request(
                                 Common.currentUser.getPhone(),
@@ -444,16 +442,14 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
                                 "0",
                                 edtComment.getText().toString(),
                                 "Order Balance",
-                                String.format("%s, %s", mLastLocation.getLatitude(), mLastLocation.getLongitude()), // Coordinates when user order
+                                String.format("%s, %s", mLastLocation.getLatitude(), mLastLocation.getLongitude()),
                                 cart);
 
-                        //Submit to Firebase
-                        //We will using System.CurrentMilli to key
                         final String order_number = String.valueOf(System.currentTimeMillis());
                         requests.child(order_number)
                                 .setValue(request);
 
-                        //Update balance
+                        //업데이트 balance
                         double balance = Double.parseDouble(Common.currentUser.getBalance().toString()) - amount;
                         Map<String, Object> update_balance = new HashMap<>();
                         update_balance.put("balance", balance);
@@ -492,7 +488,7 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
                                 });
 
                     } else {
-                        Toast.makeText(Cart.this, "Your balance not enough, please choose other payment", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Cart.this, "Balance가 부족합니다, 다른 결제 방법을 선택하세요", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -633,12 +629,12 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
-            Log.d("LOCATION", "Your location : " + mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
+            Log.d("LOCATION", "나의 위치 : " + mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
 
 
         } else {
 //                Toast.makeText(this, "Couldn't get the location", Toast.LENGTH_SHORT).show();
-            Log.d("LOCATION", "Couldn't get the location");
+            Log.d("LOCATION", "Location을 얻을 수 없음");
 
         }
     }
@@ -694,7 +690,7 @@ public class Cart extends AppCompatActivity implements GoogleApiClient.Connectio
             txtTotalPlace.setText(fmt.format(total));
 
             //SnackBar
-            Snackbar snackbar = Snackbar.make(rootLayout, name + " removed from cart", Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(rootLayout, name + " 카트에서 삭제", Snackbar.LENGTH_LONG);
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

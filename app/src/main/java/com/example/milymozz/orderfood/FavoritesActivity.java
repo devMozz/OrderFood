@@ -61,7 +61,7 @@ public class FavoritesActivity extends AppCompatActivity implements RecyclerItem
             adapter.removeItem(viewHolder.getAdapterPosition());
             new Database(getBaseContext()).removeFromFavorites(deleteItem.getFoodId(), Common.currentUser.getPhone());
 
-            Snackbar snackbar = Snackbar.make(rootLayout, name + " removed from cart", Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(rootLayout, name + " 카트에서 삭제", Snackbar.LENGTH_LONG);
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

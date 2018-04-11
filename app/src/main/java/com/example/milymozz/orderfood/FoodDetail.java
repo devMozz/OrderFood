@@ -114,7 +114,7 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
                         currentFood.getImage()
                 ));
 
-                Toast.makeText(FoodDetail.this, "Added to Cart", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FoodDetail.this, "카트에 추가", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -139,7 +139,7 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
                 getRatingFood(foodId);
 
             } else {
-                Toast.makeText(this, "Please check your connection !!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "인터넷 연결을 확인하세요 !", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -179,15 +179,15 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
     private void showRatingDialog() {
         if (!FoodDetail.this.isFinishing()) {
             new AppRatingDialog.Builder()
-                    .setPositiveButtonText("Submit")
-                    .setNegativeButtonText("Cancel")
-                    .setNoteDescriptions(Arrays.asList("Very Bad", "Not Good", "Quite Ok", "Very Good", "Excellent"))
+                    .setPositiveButtonText("등록")
+                    .setNegativeButtonText("취소")
+                    .setNoteDescriptions(Arrays.asList("맛이 별로에요", "그저 그래요", "보통이에요", "맛있어요", "완전 맛있어요"))
                     .setDefaultRating(1)
-                    .setTitle("Rate this food")
-                    .setDescription("Please select some stars and give you feedback")
+                    .setTitle("이 음식을 평가해주세요")
+                    .setDescription("별과 평점을 부탁드려요")
                     .setTitleTextColor(R.color.colorPrimary)
                     .setDescriptionTextColor(R.color.colorPrimary)
-                    .setHint("Please write your comment here...")
+                    .setHint("코멘트를 이곳에 적어주세요..")
                     .setHintTextColor(R.color.colorAccent)
                     .setCommentTextColor(android.R.color.white)
                     .setCommentBackgroundColor(R.color.colorPrimaryDark)
@@ -227,19 +227,19 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
     @Override
     public void onPositiveButtonClicked(int value, String comments) {
 
-        //Get Rating and upload to Firebase
+        //Rating을 가지고 온 후 firebase에 업로드
         final Rating rating = new Rating(Common.currentUser.getPhone(),
                 foodId,
                 String.valueOf(value),
                 comments);
 
-        //Fix user can rate multiple time
+        //유저가 평가를 multiple 하게 할 수 있다
         ratingTbl.push()
                 .setValue(rating)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(FoodDetail.this, "Thank you for submit rating !!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FoodDetail.this, "평가해 주셔서 감사합니다 !", Toast.LENGTH_SHORT).show();
                     }
                 });
 

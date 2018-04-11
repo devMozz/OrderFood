@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.milymozz.orderfood.Common.Common;
 import com.example.milymozz.orderfood.Interface.ItemClickListener;
@@ -59,8 +58,6 @@ public class OrderStatus extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        //if we start OrderStatus Activity from home Activity
-        //we will not put any extra, so we just loadOrder by phone from Common
         if (Common.currentUser.getPhone() != null) {
             loadOrders(Common.currentUser.getPhone());
         } else if (getIntent() == null){
@@ -70,10 +67,9 @@ public class OrderStatus extends AppCompatActivity {
 
     private void loadOrders(String phone) {
 
-        //Create query by category Id
+        //query 생성 by category Id
         Query getOrderByUser = requests.orderByChild("phone").equalTo(phone);
 
-        //Create Options with query
         FirebaseRecyclerOptions<Request> orderOptions = new FirebaseRecyclerOptions.Builder<Request>()
                 .setQuery(getOrderByUser, Request.class)
                 .build();
@@ -97,7 +93,7 @@ public class OrderStatus extends AppCompatActivity {
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        Toast.makeText(OrderStatus.this, "Uh?", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(OrderStatus.this, "Uh?", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

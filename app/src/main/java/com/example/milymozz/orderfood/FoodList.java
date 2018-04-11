@@ -170,7 +170,7 @@ public class FoodList extends AppCompatActivity {
                     if (Common.isConnectedToInternet(getBaseContext()))
                         loadListFood(categoryId);
                     else {
-                        Toast.makeText(FoodList.this, "Please check your connection !!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FoodList.this, "인터넷 연결을 확인하세요 !", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -178,9 +178,10 @@ public class FoodList extends AppCompatActivity {
                 //After getIntent categoryId
                 //Search
                 materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
-                materialSearchBar.setHint("Enter your food");
+                materialSearchBar.setHint("음식을 입력하세요");
 
-                loadSuggest(); // Write function to load Suggest from firebase
+                loadSuggest();
+
                 materialSearchBar.setCardViewElevation(10);
                 materialSearchBar.addTextChangeListener(new TextWatcher() {
                     @Override
@@ -239,10 +240,8 @@ public class FoodList extends AppCompatActivity {
     }
 
     private void startSearch(CharSequence text) {
-        //Create query by name
         Query searchByName = foodList.orderByChild("name").equalTo(text.toString()); //Compare Name
 
-        //Create Options with query
         FirebaseRecyclerOptions<Food> foodOptions = new FirebaseRecyclerOptions.Builder<Food>()
                 .setQuery(searchByName, Food.class)
                 .build();
@@ -267,8 +266,6 @@ public class FoodList extends AppCompatActivity {
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        //Start new Activity
-                        //Get CategoryId and send to new Activity
                         Intent foodDetailIntent = new Intent(FoodList.this, FoodDetail.class);
                         foodDetailIntent.putExtra("FoodId", searchAdapter.getRef(position).getKey()); // Send Food Id to new Activity
                         startActivity(foodDetailIntent);
@@ -278,7 +275,7 @@ public class FoodList extends AppCompatActivity {
             }
         };
         searchAdapter.startListening();
-        recyclerView.setAdapter(searchAdapter); // Set adapter for recycler view is search result
+        recyclerView.setAdapter(searchAdapter);
     }
 
     private void loadSuggest() {
@@ -287,7 +284,7 @@ public class FoodList extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Food item = postSnapshot.getValue(Food.class);
-                    suggestList.add(item.getName()); // Add name of food to suggest list
+                    suggestList.add(item.getName()); // suggest list 음식 이름 추가
 
                 }
 
@@ -303,10 +300,9 @@ public class FoodList extends AppCompatActivity {
     }
 
     private void loadListFood(String categoryId) {
-        //Create query by category Id
+        //query 생성 by category Id
         Query searchByName = foodList.orderByChild("menuId").equalTo(categoryId);
 
-        //Create Options with query
         FirebaseRecyclerOptions<Food> foodOptions = new FirebaseRecyclerOptions.Builder<Food>()
                 .setQuery(searchByName, Food.class)
                 .build();
@@ -333,7 +329,7 @@ public class FoodList extends AppCompatActivity {
                 viewHolder.quickCart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Quick cart
+
                         boolean isExists = new Database(getBaseContext()).checkFoodExists(adapter.getRef(position).getKey(), Common.currentUser.getPhone());
 
                         if (!isExists) {
@@ -351,7 +347,7 @@ public class FoodList extends AppCompatActivity {
                         } else {
                             new Database(getBaseContext()).increaseCart(Common.currentUser.getPhone(), adapter.getRef(position).getKey());
                         }
-                        Toast.makeText(FoodList.this, "Added to Cart", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FoodList.this, "카트에 추가", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -361,7 +357,7 @@ public class FoodList extends AppCompatActivity {
                         getKey(), Common.currentUser.getPhone()))
                     viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_black_24dp);
 
-                //Click to Share
+                //Share
                 viewHolder.share_image.setOnClickListener(new View.OnClickListener()
 
                 {
@@ -373,7 +369,6 @@ public class FoodList extends AppCompatActivity {
                     }
                 });
 
-                //Click to change state of Favorites
                 viewHolder.fav_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -391,11 +386,11 @@ public class FoodList extends AppCompatActivity {
                         if (!localDB.isFavorites(adapter.getRef(position).getKey(), Common.currentUser.getPhone())) {
                             localDB.addToFavorites(favorites);
                             viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_black_24dp);
-                            Toast.makeText(FoodList.this, "" + model.getName() + " was added to Favorites", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FoodList.this, "" + model.getName() + "를 Favorites에 추가", Toast.LENGTH_SHORT).show();
                         } else {
                             localDB.removeFromFavorites(adapter.getRef(position).getKey(), Common.currentUser.getPhone());
                             viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                            Toast.makeText(FoodList.this, "" + model.getName() + " was remove from Favorites", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FoodList.this, "" + model.getName() + "를 Favorites에서 삭제", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -403,10 +398,8 @@ public class FoodList extends AppCompatActivity {
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        //Start new Activity
-                        //Get CategoryId and send to new Activity
                         Intent foodDetailIntent = new Intent(FoodList.this, FoodDetail.class);
-                        foodDetailIntent.putExtra("FoodId", adapter.getRef(position).getKey()); // Send Food Id to new Activity
+                        foodDetailIntent.putExtra("FoodId", adapter.getRef(position).getKey());
                         startActivity(foodDetailIntent);
                     }
                 });
@@ -429,7 +422,6 @@ public class FoodList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //Fix click back on FoodDetail and get no item in FoodList
         if (adapter != null)
             adapter.startListening();
         if (searchAdapter != null)
